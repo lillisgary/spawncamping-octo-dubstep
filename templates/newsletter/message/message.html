@@ -1,0 +1,73 @@
+{% extends "newsletter/common.html" %}
+{% load pages_tags mezzanine_tags i18n future staticfiles %}
+
+{% load url from future %}{% load thumbnail %}<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+   "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>{{ newsletter.title }}: {{ message.title }}</title>
+{% block css_wrapper %}
+<link rel="stylesheet" href="http://{{ site.domain }}{% static "css/bootstrap.css" %}">
+<link rel="stylesheet" href="http://{{ site.domain }}{% static "css/mezzanine.css" %}">
+<link rel="stylesheet" href="http://{{ site.domain }}{% static "css/web_bootstrap.css" %}">
+{% if LANGUAGE_BIDI %}
+<link rel="stylesheet" href="http://{{ site.domain }}{% static "css/rtl.css" %}">
+{% endif %}
+{% endblock %}
+
+{% block js_wrapper %}{% endblock %}
+
+</head>
+
+
+
+<body>
+
+{% block navbar_wrapper %}<img src="{% static "img/python_icon.jpg" %}" alt="" />{% endblock %}
+
+
+
+{% block breadcrumb_wrapper %}{% endblock %}
+
+{% block left_panel %}<img src="{% static "img/python_icon.jpg" %}" alt="" />{% endblock %}
+
+{% block body %}
+    <h1>{{ newsletter.title }}</h1>
+    <h2>{{ message.title }}</h2>
+    {% for article in message.articles.all %}
+        <h3>{{ article.title }}</h3>
+
+
+        {% if article.image %}
+        <img src="http://{{ site.domain }}{{ MEDIA_URL }}{{ article.image }}" alt="" width=200 height=200 />
+        {% endif %}
+
+        <div>{{ article.text|safe }}</div>
+        
+        {% if article.url %}
+            <div><a href="{{ article.url }}">Read more</div></a>
+        {% endif %}
+    {% endfor %}
+    
+    <ul>
+        {% if submission.publish %}
+        <li><a href="http://{{ site.domain }}{{ submission.get_absolute_url }}">Read message online</a></li>
+        {% endif %}
+        <li><a href="http://{{ site.domain }}{% url "newsletter_unsubscribe_request" newsletter.slug %}">Unsubscribe</a></li>
+    </ul>
+{% endblock body %}
+
+
+{% block right_panel %}
+
+<img src="{% static "img/python_icon.jpg" %}" alt="" />
+
+{% endblock %}
+
+
+{% block footer_wrapper %}<img src="{% static "img/python_icon.jpg" %}" alt="" />{% endblock %}
+
+</body>
+</html>
